@@ -1,10 +1,13 @@
 <?php
 
 namespace App\Http\Controllers;
+
+use App\Http\Requests\Store as RequestsStore;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+
 
 class HomeController extends Controller
 {
@@ -30,23 +33,18 @@ class HomeController extends Controller
         return view('auth.register');
     } 
 
-    public function create(Request $request)
+    public function create(RequestsStore $request)
     {
-         $request->validate([
-         'name'=>'required|min:3',
-         'email'=>'required|email|unique:users',
-         'password'=>'required|min:5|max:12',
-         'mobile_no'=>'required|min:10', 
-        ]);
-          $user = new User;
-          $user->name = $request->name;
-          $user->email = $request->email;
-          $user->password = Hash::make($request->password);
-          $user->mobile_no = $request->mobile_no;
-          $user->save();
-          
-          Auth::login($user);
-          
+        
+        $data = $request->validated();
+
+        $data['password'] = bcrypt($request->password);
+           
+        $user=User::create($data);
+
+       
+
+        Auth::login($user);
             return redirect()->route('dashboard');
          }
       
@@ -64,6 +62,7 @@ class HomeController extends Controller
             if (Auth::attempt($credentials)) {
                 $request->session()->regenerate();
                 return redirect()->intended('/admin/dashboard');
+                //return User::where(['email'=>$request->email])->first();
             }
     
             return back()->withErrors([

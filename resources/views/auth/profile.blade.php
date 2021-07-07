@@ -26,8 +26,8 @@
                     @csrf
                     <button type="submit"><i class="fa fa-trash"></i>delete</button>
                   </form>
-            @endforeach
-        </tbody>
+            @endforeach 
+               </tbody>
     </table>
 </body>
 </html>

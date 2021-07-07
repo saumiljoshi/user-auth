@@ -1,8 +1,11 @@
 <?php
 
 namespace App\Http\Controllers;
+
+use App\Http\Requests\Store;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
+use Illuminate\Support\Facades\auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -16,8 +19,7 @@ class UsersController extends Controller
     public function index()
     {
         $user = User::all();
-        return view('auth.profile',compact('user'));
-      
+        return view('auth.profile',compact('user'));      
     }
 
     /**
@@ -25,9 +27,22 @@ class UsersController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
-        //
+        return request()->validate([
+            'name' => 'required|max:3',
+            'email' => 'required|email|unique:users',
+            'password' => 'required||min:5',
+            'mobile_no' => 'required|max:10'
+        ]);
+        /*$user = new User();
+        $user->name = $request->name;
+        $user->email=$request->email;
+        $user->password=$request->password;
+        $user->mobile_no=$request->mobile_no;*/
+
+       
+
     }
 
     /**
@@ -73,24 +88,15 @@ class UsersController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request,User $user)
+    public function update(Store $request,User $user)
     {   
-        // dd($request->all());
-
-        // $request->validate([
-        //     'name'=>'required',
-        //     'email'=>'required|email',
-        //     'password' =>'required|password',
-        //     'mobile'=>'required|min:10|max:10',
-        // ]);
-
+       
+       
+        $data = $request->validated();
         
-        $user->name = $request->name;
-        $user->email = $request->email;
-        $user->password = Hash::make($request->password);
-        $user->mobile_no = $request->mobile_no;
-        $user->save();
+        $data['password'] = bcrypt($request->password);
         
+        $user = $user->update($data);
 
         if($user){
             return redirect()->route('users.index');
@@ -107,6 +113,8 @@ class UsersController extends Controller
     {
         $data = User::find($id);
         $data->delete();
-        return redirect()->back();
+        if($data){
+            return back()->with('deleted successfully');
+       }
     }
 }

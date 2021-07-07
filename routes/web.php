@@ -37,5 +37,6 @@ Route::prefix('admin')->middleware('auth')->group(function () {
     //Route::get('/edit',[CrudController::class,'edit']);
     //Route::post('/edit',[CrudController::class, 'update'])->name('update');
    // Route::post('/register',[HomeController::class,'create'])->name('register');
-    
+
 });
+
