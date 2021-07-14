@@ -23,6 +23,21 @@ class User extends Authenticatable
         'password',
         'mobile_no',
     ];
+    // set Mutator
+    public function setPasswordAttribute($password){
+
+        $this->attributes['password'] = bcrypt($password);
+       
+    }
+
+    //Apply Accessor
+    public function getNameAttribute($name){
+
+        return 'Mr. '. ucfirst($name);
+    }
+    public function setNameAttribute($value){
+        $this->attributes['name'] = strtolower($value);
+    }
 
     /**
      * The attributes that should be hidden for arrays.

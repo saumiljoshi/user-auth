@@ -91,7 +91,6 @@ class UsersController extends Controller
     public function update(Store $request,User $user)
     {   
        
-       
         $data = $request->validated();
         
         $data['password'] = bcrypt($request->password);

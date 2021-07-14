@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Requests;
-
+use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class Store extends FormRequest
@@ -23,19 +23,29 @@ class Store extends FormRequest
      */
     public function rules()
     {
-        return [
+        $rules = [
             'name'=>[
-                'required|min:3'
+                'required'
             ],
             'email'=>[
-                'required|email|unique:users'
+                'required',
+                'email',
+                Rule::unique('users'),
             ],
             'password'=>[
-                'required|min:5|max:12'
+                'required'
             ],
             'mobile_no'=>[
-                'required|min:10'
+                'required',
+                'max:10'
             ],
         ];
+
+        if ($this->getMethod() == 'PUT') {
+            $rules['email'] = 'nullable';
+        }
+
+        return $rules;
     }
+
 }

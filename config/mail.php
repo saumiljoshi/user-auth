@@ -51,10 +51,14 @@ return [
 
         'mailgun' => [
             'transport' => 'mailgun',
+            'domain' => env('MAILGUN_DOMAIN'),
+            'secret' => env('MAILGUN_SECRET'),
+            'endpoint' => env('MAILGUN_ENDPOINT','api.eu.mailgun.net'),
         ],
 
         'postmark' => [
             'transport' => 'postmark',
+            'message_stream_id' => env('POSTMARK_MESSAGE_STREAM_ID'),
         ],
 
         'sendmail' => [
@@ -86,7 +90,9 @@ return [
     'from' => [
         'address' => env('MAIL_FROM_ADDRESS', 'hello@example.com'),
         'name' => env('MAIL_FROM_NAME', 'Example'),
+        'address' => 'examples@example.com','name' => 'App Name'
     ],
+    'reply_to' => ['address' => 'example@example.com','name'=>'App Name'],
 
     /*
     |--------------------------------------------------------------------------

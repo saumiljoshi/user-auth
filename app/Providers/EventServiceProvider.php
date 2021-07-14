@@ -1,7 +1,8 @@
 <?php
 
 namespace App\Providers;
-
+use App\Events\TaskEvent;
+use App\listener\TaskEventListener;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -18,6 +19,12 @@ class EventServiceProvider extends ServiceProvider
         Registered::class => [
             SendEmailVerificationNotification::class,
         ],
+        'App\Event\UserCreated' => [ 
+            'App\Listener\SendEmail',
+        ],
+        //'App\Event\TaskEvent' => [
+           // 'App\Listeners\TaskEventListener',
+        //]
     ];
 
     /**
@@ -27,6 +34,10 @@ class EventServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+       /*Event::listen(TaskEvent::class, [TaskEventListener::class,'handle']
+       );
+       Event::listen(function (TaskEvent $event){
+
+       });*/
     }
 }

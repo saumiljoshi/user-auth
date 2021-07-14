@@ -37,13 +37,11 @@ class HomeController extends Controller
     {
         
         $data = $request->validated();
+        
 
-        $data['password'] = bcrypt($request->password);
+        //$data['password'] = bcrypt($request->password);
            
-        $user=User::create($data);
-
-       
-
+        $user=User::create($data); 
         Auth::login($user);
             return redirect()->route('dashboard');
          }
